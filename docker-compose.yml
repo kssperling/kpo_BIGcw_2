@@ -1,0 +1,100 @@
+﻿services:
+  postgres-filestoring:
+    image: postgres:14
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=filestoring_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-filestoring-data:/var/lib/postgresql/data
+    networks:
+      - antiplagiat-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  postgres-fileanalysis:
+    image: postgres:14
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=fileanalysis_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-fileanalysis-data:/var/lib/postgresql/data
+    networks:
+      - antiplagiat-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  apigateway:
+    image: apigateway
+    build:
+      context: .
+      dockerfile: APIGateway/Dockerfile
+    ports:
+      - "7001:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+    networks:
+      - antiplagiat-network
+    depends_on:
+      - filestoring
+      - fileanalysis
+
+  filestoring:
+    image: filestoring
+    build:
+      context: .
+      dockerfile: FileStoringService/Dockerfile
+    ports:
+      - "7002:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Host=postgres-filestoring;Port=5432;Database=filestoring_db;Username=postgres;Password=postgres
+    volumes:
+      - file-storage-data:/app/FileStorage
+    networks:
+      - antiplagiat-network
+    depends_on:
+      - postgres-filestoring
+
+  fileanalysis:
+    image: fileanalysis
+    build:
+      context: .
+      dockerfile: FileAnalisysService/Dockerfile
+    ports:
+      - "7003:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - FileStoringService__Url=http://filestoring
+      - ConnectionStrings__DefaultConnection=Host=postgres-fileanalysis;Port=5432;Database=fileanalysis_db;Username=postgres;Password=postgres
+    volumes:
+      - word-cloud-data:/app/WordCloudStorage
+    networks:
+      - antiplagiat-network
+    depends_on:
+      - filestoring
+      - postgres-fileanalysis
+
+networks:
+  antiplagiat-network:
+    driver: bridge
+
+volumes:
+  file-storage-data:
+  postgres-filestoring-data:
+  postgres-fileanalysis-data:
+  word-cloud-data:

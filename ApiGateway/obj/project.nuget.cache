@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "Bkjb8l3SJ78=",
+  "success": true,
+  "projectFilePath": "/Users/kseniasperling/RiderProjects/kpo_cw_2/ApiGateway/ApiGateway.csproj",
+  "expectedPackageFiles": [
+    "/Users/kseniasperling/.nuget/packages/system.io.hashing/7.0.0/system.io.hashing.7.0.0.nupkg.sha512",
+    "/Users/kseniasperling/.nuget/packages/yarp.reverseproxy/2.1.0/yarp.reverseproxy.2.1.0.nupkg.sha512"
+  ],
+  "logs": []
+}

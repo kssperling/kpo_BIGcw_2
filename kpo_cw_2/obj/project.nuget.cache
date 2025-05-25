@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "8+BmZBrkiSc=",
+  "success": true,
+  "projectFilePath": "/Users/kseniasperling/RiderProjects/kpo_cw_2/kpo_cw_2/kpo_cw_2.csproj",
+  "expectedPackageFiles": [
+    "/Users/kseniasperling/.nuget/packages/microsoft.netcore.app.ref/8.0.15/microsoft.netcore.app.ref.8.0.15.nupkg.sha512",
+    "/Users/kseniasperling/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.15/microsoft.aspnetcore.app.ref.8.0.15.nupkg.sha512",
+    "/Users/kseniasperling/.nuget/packages/microsoft.netcore.app.host.osx-arm64/8.0.15/microsoft.netcore.app.host.osx-arm64.8.0.15.nupkg.sha512"
+  ],
+  "logs": []
+}
